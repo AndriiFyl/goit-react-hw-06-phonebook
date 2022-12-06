@@ -3,7 +3,6 @@ import css from './ContactsList.module.css';
 import PropTypes from 'prop-types';
 
 const ContactsList = ({ contacts, onDeleteContact }) => {
-  console.log(contacts);
   return (
     <ul className={css.list__container}>
       {/* Деструктуризируем contacts -> id, name */}

@@ -7,21 +7,11 @@ import ContactForm from './ContactForm';
 import Filter from './Filter/Filter';
 
 export default function App() {
-  // при такой заипси обращение к localStorage будет вызываться при каждом рендере.
-  // интерпретаор JS когда видит такое выражение(которое нужно вычислить) как аргумент функции,
-  // то такие вычисления будут происходить при каждом рендере - что не очень хорошо (т.к. немного замедляет работу)
-  // const [contacts, setContacts] = useState(
-  //   JSON.parse(localStorage.getItem('contacts')) ?? []
-  // );
-
-  // в таких случаях использують lazy load inizialization: если начальное значение useState зависит от
-  // какого-то выражения(рассчетов), то нужно написать функцию, которая вернет значение данных рассчетов
   const [contacts, setContacts] = useState(() => {
     return JSON.parse(localStorage.getItem('contacts')) ?? [];
   });
 
   const [filter, setFilter] = useState('');
-  console.log(contacts);
 
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
