@@ -7,14 +7,19 @@ export default function ContactForm(props) {
   const [number, setNumber] = useState('');
 
   const handleChange = event => {
-    const { name, value } = event.currentTarget;
-    switch (name) {
+    const input = event.currentTarget;
+
+    // умова по імені інпута
+    switch (input.name) {
+      // якщо ввводимо щось в інпут з ім'ям name
       case 'name':
-        setName(value);
+        // то запишемо в наш локальний стейт до ключа name те що ввели в цей інпут
+
+        setName(input.value);
         break;
 
       case 'number':
-        setNumber(value);
+        setNumber(input.value);
         break;
 
       default:
@@ -24,6 +29,7 @@ export default function ContactForm(props) {
 
   const handleSubmit = event => {
     event.preventDefault();
+    // передаємо до App ім'я та номер абонента, який ввели і сабмітнули в даній формі
     props.onSubmitForm({ name, number });
     resetInputsForm();
   };

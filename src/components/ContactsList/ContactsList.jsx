@@ -6,10 +6,10 @@ const ContactsList = ({ contacts, onDeleteContact }) => {
   return (
     <ul className={css.list__container}>
       {/* Деструктуризируем contacts -> id, name */}
-      {contacts.map(({ id, name, number }) => (
+      {contacts.map(({ id, name, phone }) => (
         <li className={css.item} key={id}>
-          <p className={css.name}>{name}:</p>
-          <p className={css.number}>{number}</p>
+          <p className={css.name}>{name}</p>
+          <p className={css.number}>{phone}</p>
           <button
             className={css.btn__delete}
             type="button"

@@ -1,37 +1,28 @@
 // ХУКИ=======================================================
-import { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid';
+import { useDispatch, useSelector } from 'react-redux';
+// import { useEffect } from 'react';
+import { deleteContact, addContact, getContacts } from 'redux/contactsSlice';
+import { filterContacts, getFilter } from 'redux/filterSlice';
 import css from './App.module.css';
 import ContactsList from './ContactsList';
 import ContactForm from './ContactForm';
 import Filter from './Filter/Filter';
 
 export default function App() {
-  const [contacts, setContacts] = useState(() => {
-    return JSON.parse(localStorage.getItem('contacts')) ?? [];
-  });
+  const contactsList = useSelector(getContacts);
+  const filterAllContacts = useSelector(getFilter);
+  const dispatch = useDispatch();
 
-  const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
+  console.log(contactsList);
+  console.log(filterAllContacts);
 
   const deleteContactItem = contactId => {
-    const filtredContacts = contacts.filter(
-      contact => contact.id !== contactId
-    );
-    setContacts(filtredContacts);
+    dispatch(deleteContact(contactId));
   };
 
-  const addContact = ({ name, number }) => {
-    const contact = {
-      id: nanoid(),
-      name,
-      number,
-    };
-
-    const repeatingName = contacts.find(
+  // addNewContact в параметри name та number приймає дані, які сабмітнули в формі
+  const addNewContact = ({ name, number }) => {
+    const repeatingName = contactsList.contacts.find(
       contact => contact.name.toLowerCase() === name.toLowerCase()
     );
 
@@ -39,38 +30,31 @@ export default function App() {
       alert(`${name} is already in contacts.`);
       return;
     }
-
-    setContacts([contact, ...contacts]);
+    dispatch(addContact(name, number));
   };
 
   const changeFilter = event => {
-    setFilter(event.currentTarget.value);
+    console.log('here');
+    dispatch(filterContacts(event.currentTarget.value));
   };
 
   const getVisibleContacts = () => {
-    const normilizedFilter = filter.toLowerCase();
+    const normilizedFilter = filterAllContacts.filter.toLowerCase();
 
-    return contacts.filter(contact =>
+    return contactsList.contacts.filter(contact =>
       contact.name.toLowerCase().includes(normilizedFilter)
     );
   };
 
-  // useEffect(() => {
-  //   const contacts = localStorage.getItem('contacts');
-  //   const parsedContacts = JSON.parse(contacts);
-  //   if (parsedContacts) {
-  //     setContacts(parsedContacts);
-  //   }
-  // }, []);
-
   const visibleContacts = getVisibleContacts();
+  console.log(visibleContacts);
 
   return (
     <div className={css.container}>
       <h1 className={css.head_title}>Phonebook</h1>
-      <ContactForm onSubmitForm={addContact} />
+      <ContactForm onSubmitForm={addNewContact} />
       <h1 className={css.head_title}>Contacts</h1>
-      <Filter value={filter} onChange={changeFilter} />
+      <Filter value={filterAllContacts.filter} onChange={changeFilter} />
       <ContactsList
         contacts={visibleContacts}
         onDeleteContact={deleteContactItem}
