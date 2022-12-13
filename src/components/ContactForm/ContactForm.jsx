@@ -1,10 +1,15 @@
 // Хуки===============================================================
 import { useState } from 'react';
 import css from './ContactForm.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact, getContacts } from 'redux/contactsSlice';
 
-export default function ContactForm(props) {
+export default function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const contactsList = useSelector(getContacts);
+  const dispatch = useDispatch();
 
   const handleChange = event => {
     const input = event.currentTarget;
@@ -29,8 +34,15 @@ export default function ContactForm(props) {
 
   const handleSubmit = event => {
     event.preventDefault();
-    // передаємо до App ім'я та номер абонента, який ввели і сабмітнули в даній формі
-    props.onSubmitForm({ name, number });
+    const repeatingName = contactsList.contacts.find(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+    if (repeatingName) {
+      alert(`${name} is already in contacts.`);
+      return;
+    } else {
+      dispatch(addContact(name, number));
+    }
     resetInputsForm();
   };
 

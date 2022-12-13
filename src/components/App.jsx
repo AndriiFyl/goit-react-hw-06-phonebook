@@ -1,67 +1,78 @@
 // ХУКИ=======================================================
-import { useDispatch, useSelector } from 'react-redux';
-// import { useEffect } from 'react';
-import { deleteContact, addContact, getContacts } from 'redux/contactsSlice';
-import { filterContacts, getFilter } from 'redux/filterSlice';
 import css from './App.module.css';
 import ContactsList from './ContactsList';
 import ContactForm from './ContactForm';
 import Filter from './Filter/Filter';
 
 export default function App() {
-  const contactsList = useSelector(getContacts);
-  const filterAllContacts = useSelector(getFilter);
-  const dispatch = useDispatch();
-
-  console.log(contactsList);
-  console.log(filterAllContacts);
-
-  const deleteContactItem = contactId => {
-    dispatch(deleteContact(contactId));
-  };
-
-  // addNewContact в параметри name та number приймає дані, які сабмітнули в формі
-  const addNewContact = ({ name, number }) => {
-    const repeatingName = contactsList.contacts.find(
-      contact => contact.name.toLowerCase() === name.toLowerCase()
-    );
-
-    if (repeatingName) {
-      alert(`${name} is already in contacts.`);
-      return;
-    }
-    dispatch(addContact(name, number));
-  };
-
-  const changeFilter = event => {
-    console.log('here');
-    dispatch(filterContacts(event.currentTarget.value));
-  };
-
-  const getVisibleContacts = () => {
-    const normilizedFilter = filterAllContacts.filter.toLowerCase();
-
-    return contactsList.contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normilizedFilter)
-    );
-  };
-
-  const visibleContacts = getVisibleContacts();
-  console.log(visibleContacts);
-
   return (
     <div className={css.container}>
       <h1 className={css.head_title}>Phonebook</h1>
-      <ContactForm onSubmitForm={addNewContact} />
+      <ContactForm />
       <h1 className={css.head_title}>Contacts</h1>
-      <Filter value={filterAllContacts.filter} onChange={changeFilter} />
-      <ContactsList
-        contacts={visibleContacts}
-        onDeleteContact={deleteContactItem}
-      />
+      <Filter />
+      <ContactsList />
     </div>
   );
 }
+// // ХУКИ=======================================================
+// import { useDispatch, useSelector } from 'react-redux';
+// import { deleteContact, addContact, getContacts } from 'redux/contactsSlice';
+// import { filterContacts, getFilter } from 'redux/filterSlice';
+// import css from './App.module.css';
+// import ContactsList from './ContactsList';
+// import ContactForm from './ContactForm';
+// import Filter from './Filter/Filter';
+
+// export default function App() {
+//   const contactsList = useSelector(getContacts);
+//   const filterAllContacts = useSelector(getFilter);
+//   const dispatch = useDispatch();
+
+//   const deleteContactItem = contactId => {
+//     dispatch(deleteContact(contactId));
+//   };
+
+//   // addNewContact в параметри name та number приймає дані, які сабмітнули в формі
+//   const addNewContact = ({ name, number }) => {
+//     const repeatingName = contactsList.contacts.find(
+//       contact => contact.name.toLowerCase() === name.toLowerCase()
+//     );
+
+//     if (repeatingName) {
+//       alert(`${name} is already in contacts.`);
+//       return;
+//     }
+//     dispatch(addContact(name, number));
+//   };
+
+//   const changeFilter = event => {
+//     console.log('here');
+//     dispatch(filterContacts(event.currentTarget.value));
+//   };
+
+//   const getVisibleContacts = () => {
+//     const normilizedFilter = filterAllContacts.filter.toLowerCase();
+
+//     return contactsList.contacts.filter(contact =>
+//       contact.name.toLowerCase().includes(normilizedFilter)
+//     );
+//   };
+//   const visibleContacts = getVisibleContacts();
+
+//   return (
+//     <div className={css.container}>
+//       <h1 className={css.head_title}>Phonebook</h1>
+//       <ContactForm onSubmitForm={addNewContact} />
+//       <h1 className={css.head_title}>Contacts</h1>
+//       <Filter value={filterAllContacts.filter} onChange={changeFilter} />
+//       <ContactsList
+//         contacts={visibleContacts}
+//         onDeleteContact={deleteContactItem}
+//       />
+//     </div>
+//   );
+// }
 
 // КЛАСС-КОМПОНЕНТ====================================================
 // import React from 'react';
